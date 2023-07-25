@@ -24,8 +24,17 @@ const segundoPokeImg = document.getElementById("imgPokemon2");
 const tercerPoke = document.getElementById("tercerPokemon");
 const tercerPokeImg = document.getElementById("imgPokemon3");
 
+const primerEvolu = document.getElementById("primerEvolu");
+const segundoEvolu = document.getElementById("segundoEvolu");
+const tercerEvolu = document.getElementById("tercerEvolu");
+
 
 let arrayTabla=[  ['Stat', 'Base stat',]]
+
+
+$('#primerEvolu').prop("hidden",true);
+$('#segundoEvolu').prop("hidden",true);
+$('#tercerEvolu').prop("hidden",true);
 obtenerDetallesPokemon(idPokemon)
 
 function obtenerParametroURL(nombre) {
@@ -110,27 +119,46 @@ function statPokemon(data){
 function evolucionts(data){
     var url_nombre = "https://pokeapi.co/api/v2/pokemon-species/"+data.name
 
+
+
     fetch(url_nombre)
     .then((response)=> response.json())
     .then(data2=>{ 
-
-        fetch(data2.evolution_chain.url)
+       
+            fetch(data2.evolution_chain.url)
         .then((reponse2)=>reponse2.json())
         .then(data3=>{
+            try {
+               
+                
+                if(data3.chain.evolves_to.length>0){
+                    $('#primerEvolu').prop("hidden",false);
+                    $('#segundoEvolu').prop("hidden",false);
+                    //primer evolution
+                    let unPoke = data3.chain.species.name;
+                    primerPoke.innerHTML = unPoke; 
+                    obtenerImgEvo(unPoke,primerPokeImg)
 
-            let unPoke = data3.chain.species.name;
-            primerPoke.innerHTML = unPoke; 
-            obtenerImgEvo(unPoke,primerPokeImg)
-  
-            let dosPoke = data3.chain.evolves_to[0].species.name;
-            segundoPoke.innerHTML = dosPoke;
-            obtenerImgEvo(dosPoke,segundoPokeImg)
+                    //segunda evolution
+                    let dosPoke = data3.chain.evolves_to[0].species.name;
+                    segundoPoke.innerHTML = dosPoke;
+                    obtenerImgEvo(dosPoke,segundoPokeImg)
 
-            let tresPoke=data3.chain.evolves_to[0].evolves_to[0].species.name;
-            tercerPoke.innerHTML = tresPoke;
-            obtenerImgEvo(tresPoke,tercerPokeImg);
-
-        })
+                }
+                //tercera evolucion si existe
+                if(data3.chain.evolves_to[0].evolves_to[0]!=undefined){
+                    $('#tercerEvolu').prop("hidden",false);
+                    let tresPoke=data3.chain.evolves_to[0].evolves_to[0].species.name;
+                    tercerPoke.innerHTML = tresPoke;
+                    obtenerImgEvo(tresPoke,tercerPokeImg)
+                }
+    
+            } catch (error) {
+                console.log(error)
+            }
+           
+        });
+       
       
     });
 
