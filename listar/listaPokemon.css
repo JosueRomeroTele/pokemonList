@@ -24,8 +24,11 @@ body{
 }
 
 .pagination{
-    width: 90%;
-    display: inline-flex;
-    margin: 1rem 0 0 51rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+    
 }
 
