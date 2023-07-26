@@ -95,7 +95,7 @@ function mostrarPokemon(data){
 
 function detallePokemon(id){
     var data = encodeURIComponent(id);
-    window.location.href= "detalle/detallePokemon.html?data="+data;
+    window.location.href= "form/detallePokemon.html?data="+data;
 }
 
 function removerPokemones(){
